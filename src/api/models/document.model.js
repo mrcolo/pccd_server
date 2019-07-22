@@ -14,6 +14,9 @@ const classSchema = new mongoose.Schema({
   class_id: {
     type: String,
   },
+  notes: {
+    type: String,
+  },
 });
 
 const termSchema = new mongoose.Schema({
@@ -44,9 +47,6 @@ const documentSchema = new mongoose.Schema({
   career_community: {
     type: String,
   },
-  term_code: {
-    type: String,
-  },
   current_program: {
     type: String,
   },
@@ -55,9 +55,6 @@ const documentSchema = new mongoose.Schema({
   },
   terms: {
     type: [termSchema],
-  },
-  notes: {
-    type: String,
   },
 }, {
   timestamps: true,
@@ -128,28 +125,43 @@ documentSchema.statics = {
       .exec();
   },
 
-  /**
-   * Return new validation error
-   * if error is a mongoose duplicate key error
-   *
-   * @param {Error} error
-   * @returns {Error|APIError}
-   */
-  checkDuplicateEmail(error) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-      return new APIError({
-        message: 'Validation Error',
-        errors: [{
-          field: 'email',
-          location: 'body',
-          messages: ['"email" already exists'],
-        }],
-        status: httpStatus.CONFLICT,
-        isPublic: true,
-        stack: error.stack,
+  async completeMe(curr, cat) {
+    try {
+      let document;
+      let query;
+      switch (cat) {
+        case '0':
+          query = { title: { $regex: `^${curr}` } };
+          break;
+        case '1':
+          query = { current_program: { $regex: `^${curr}` } };
+          break;
+        case '2':
+          query = { career_community: { $regex: `^${curr}` } };
+          break;
+        default:
+          break;
+      }
+
+      if (curr.length > 0) {
+        try {
+          document = await this.find(query).exec();
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      if (document) {
+        return document;
+      }
+
+      throw new APIError({
+        message: 'class does not exist',
+        status: httpStatus.NOT_FOUND,
       });
+    } catch (error) {
+      throw error;
     }
-    return error;
   },
 };
 

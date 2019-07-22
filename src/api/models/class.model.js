@@ -52,6 +52,15 @@ const classSchema = new mongoose.Schema({
   html_description: {
     type: String,
   },
+  igetc: {
+    type: String,
+  },
+  pcc: {
+    type: String,
+  },
+  csu: {
+    type: String,
+  },
   PREREQ1: {
     type: String,
   },
@@ -216,7 +225,7 @@ const classSchema = new mongoose.Schema({
 classSchema.method({
   transform() {
     const transformed = {};
-    const fields = ['course', 'title'];
+    const fields = ['course', 'title', 'max_units'];
 
     fields.forEach((field) => {
       transformed[field] = this[field];
@@ -260,7 +269,7 @@ classSchema.statics = {
       let course;
 
       if (curr.length > 0) {
-        course = await this.find({ course: { $regex: `^${curr}` } }).select({ course: 1 }).exec();
+        course = await this.find({ course: { $regex: `^${curr}` } }).select({ course: 1, max_units: 1, title: 1 }).exec();
       }
       if (course) {
         return course;

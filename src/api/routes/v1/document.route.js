@@ -16,6 +16,11 @@ const router = express.Router();
  */
 router.param('documentId', controller.load);
 
+
+router
+  .route('/autocomplete')
+  .get(controller.autocomplete);
+
 router
   .route('/')
   /**
@@ -48,11 +53,6 @@ router
    * @apiPermission TODO
    *
    * @apiHeader {String} Authorization   Document's access token
-   *
-   * @apiParam  {String}             email     Document's email
-   * @apiParam  {String{6..128}}     password  Document's password
-   * @apiParam  {String{..128}}      [name]    Document's name
-   * @apiParam  {String=user,admin}  [role]    Document's role
    *
    * @apiSuccess (Created 201) {String}  id         Document's id
    * @apiSuccess (Created 201) {String}  name       Document's name
@@ -162,6 +162,5 @@ router
    * @apiError (Not Found 404)    NotFound      Document does not exist
    */
   .delete(controller.remove);
-
 
 module.exports = router;

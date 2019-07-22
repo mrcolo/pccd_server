@@ -19,7 +19,7 @@ exports.load = async (req, res, next, id) => {
  * Get a document
  * @public
  */
-exports.get = (req, res) => res.json(req.locals.user.transform());
+exports.get = (req, res) => res.json(req.locals.classes.transform());
 
 /**
  * Create new document

@@ -8,8 +8,8 @@ const Document = require('../models/document.model');
  */
 exports.load = async (req, res, next, id) => {
   try {
-    const documents = await Document.get(id);
-    req.locals = { documents };
+    const document = await Document.get(id);
+    req.locals = { document };
     return next();
   } catch (error) {
     return next(error);
@@ -89,9 +89,18 @@ exports.list = async (req, res, next) => {
  * @public
  */
 exports.remove = (req, res, next) => {
-  const { user } = req.locals;
+  const { document } = req.locals;
 
-  user.remove()
+  document.remove()
     .then(() => res.status(httpStatus.NO_CONTENT).end())
     .catch(e => next(e));
+};
+
+exports.autocomplete = async (req, res, next) => {
+  try {
+    const documents = await Document.completeMe(req.query.a, req.query.c);
+    res.json(documents);
+  } catch (error) {
+    next(error);
+  }
 };
