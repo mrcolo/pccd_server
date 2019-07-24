@@ -29,7 +29,6 @@ exports.create = async (req, res, next) => {
   try {
     const tempClass = new Class(req.body);
     const savedClass = await tempClass.save();
-
     res.status(httpStatus.CREATED);
     res.json(savedClass.transform());
   } catch (error) {

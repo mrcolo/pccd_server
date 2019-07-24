@@ -29,7 +29,7 @@ exports.get = (req, res) => res.json(req.locals.user.transform());
 exports.loggedIn = (req, res) => res.json(req.user.transform());
 
 /**
- * Create new user 
+ * Create new user
  * @public
  */
 exports.create = async (req, res, next) => {

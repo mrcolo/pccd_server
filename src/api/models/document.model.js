@@ -38,6 +38,9 @@ const documentSchema = new mongoose.Schema({
   outcomes: {
     type: String,
   },
+  state: {
+    type: String,
+  },
   jobs: {
     type: String,
   },
@@ -66,8 +69,7 @@ const documentSchema = new mongoose.Schema({
 documentSchema.method({
   transform() {
     const transformed = {};
-    const fields = ['id', 'title', 'description', 'outcomes',
-      'jobs', 'skills', 'career_community', 'term_code', 'current_program', 'lead', 'terms', 'createdAt', 'notes'];
+    const fields = ['id', 'title', 'description', 'outcomes', 'jobs', 'state', 'skills', 'career_community', 'term_code', 'current_program', 'lead', 'terms', 'createdAt', 'notes'];
 
     fields.forEach((field) => {
       transformed[field] = this[field];
