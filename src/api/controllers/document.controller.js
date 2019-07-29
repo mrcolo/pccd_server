@@ -99,7 +99,8 @@ exports.remove = (req, res, next) => {
 exports.autocomplete = async (req, res, next) => {
   try {
     const documents = await Document.completeMe(req.query.a, req.query.c);
-    res.json(documents);
+    const transformedDocuments = documents.map(document => document.transform());
+    res.json(transformedDocuments);
   } catch (error) {
     next(error);
   }
